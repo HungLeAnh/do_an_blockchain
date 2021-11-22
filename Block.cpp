@@ -112,8 +112,8 @@ void Block::PrintBlock()
     printf("\nMode: %d", data.mode);
     printf("\nAmount: %lf", data.amount);
     printf("\nPrice: %lf", data.price);
-    printf("\nPackageCode: %s", data.packageCode.c_str());
     printf("\nDate: %s", data.date.c_str());
+    printf("\nPackageCode: %s", data.packageCode.c_str());
     printf("\nAddress: %s", data.address.c_str());
     printf("\nName: %s", data.name.c_str());
     printf("\ntype: %s", data.type.c_str());

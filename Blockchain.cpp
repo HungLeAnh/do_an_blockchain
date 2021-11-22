@@ -150,7 +150,9 @@ void Blockchain::loadBlockFromFile()
     saveFile.open("Blockdata.txt", std::ios::out | std::ios::in | std::ios::app);
     std::fstream blockData;
     blockData.open("Blockdata.txt", std::ios::in);
-    while (!blockData.eof()) {
+    char checkEOF;
+    while (blockData.get(checkEOF)) {
+        blockData.unget();
         int index;
         size_t hash, prehash;
         blockData >> index;
@@ -160,6 +162,7 @@ void Blockchain::loadBlockFromFile()
         blockData >> prehash;
         Block savedBlock(index,savedData,hash,prehash);
         chain.push_back(savedBlock);
+        char dumbChar = blockData.get();
     }
 }
 

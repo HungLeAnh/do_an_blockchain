@@ -56,10 +56,10 @@ struct Data
         std::cin.ignore();
         std::getline(std::cin, address);
         printf("Enter name: ");
-        std::cin.ignore();
+        //std::cin.ignore();
         std::getline(std::cin, name);
         printf("Enter type: ");
-        std::cin.ignore();
+        //std::cin.ignore();
         std::getline(std::cin, type);
         time_t newtime;
         timestamp = time(&newtime);
@@ -68,13 +68,11 @@ struct Data
         savedData >> mode;
         savedData >> amount;
         savedData >> price;
-        savedData >> date;
         savedData >> packageCode;
+        savedData >> date;
         savedData.ignore();
         getline(savedData,address);
-        savedData.ignore();
         getline(savedData, name);
-        savedData.ignore();
         getline(savedData, type);
         savedData >> timestamp;
     }
