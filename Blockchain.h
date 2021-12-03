@@ -26,22 +26,23 @@ public:
     Blockchain();
 
     // Public Functions
-    Block createGenesisBlock();
+    Block createGenesisBlock(std::string name);
     std::vector<Block> getChain();
     Block* getLatestBlock();
     bool isChainValid();
+    void loadBlockFromFile(std::string name);
+    void saveBlock(Block block);
     void addBlock(Data data);
+    void printChain();
     int getDayfromDate(std::string date);
     int getMonthfromDate(std::string date);
     int getYearfromDate(std::string date);
     void searchPackageCode(std::string _packageCode);
-    void printChain();
-    void amountInStorage();
+    double amountInStorage();
     void alertStorage();
     void profitOfInter();
     void searchFromDatetoDate(int m1, int y1, int m2, int y2);
-    void saveBlock(Block block);
-    void loadBlockFromFile();
+    void barChartOfYear(int year);
 };
 
 #endif /* Blockchain_h */

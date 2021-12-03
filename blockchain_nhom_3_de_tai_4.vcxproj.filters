@@ -24,6 +24,9 @@
     <ClCompile Include="Blockchain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Users.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Blockchain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Users.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

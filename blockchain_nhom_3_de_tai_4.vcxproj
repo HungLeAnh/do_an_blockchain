@@ -142,11 +142,13 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Blockchain.cpp" />
     <ClCompile Include="blockchain_nhom_3_de_tai_4.cpp" />
+    <ClCompile Include="Users.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
     <ClInclude Include="Blockchain.h" />
     <ClInclude Include="Data.h" />
+    <ClInclude Include="Users.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

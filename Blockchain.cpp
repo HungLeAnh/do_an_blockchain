@@ -17,8 +17,7 @@
 
 // Blockchain Constructor
 Blockchain::Blockchain()
-{
-    
+{   
 }
 
 // Public Chain Getter
@@ -27,9 +26,10 @@ std::vector<Block> Blockchain::getChain() {
 }
 
 // Create Genesis Block
-Block Blockchain::createGenesisBlock()
+Block Blockchain::createGenesisBlock(std::string name)
 {
-    saveFile.open("Blockdata.txt", std::ios::out | std::ios::in);
+    std::string path = name + ".txt";
+    saveFile.open(path, std::fstream::out | std::fstream::in |std::fstream::trunc);
     // Get Current Time
     std::time_t current;
 
@@ -54,7 +54,7 @@ void Blockchain::addBlock(Data d)
     int index = (int)chain.size();
     std::size_t previousHash = (int)chain.size() > 0 ? getLatestBlock()->getHash() : 0;
     Block newBlock(index, d, previousHash);
-    newBlock.MineBlock(0);
+    newBlock.MineBlock(1);
     chain.push_back(newBlock);
     saveBlock(newBlock);
 }
@@ -145,11 +145,12 @@ void Blockchain::saveBlock(Block block)
     saveFile << block.getPreviousHash() << std::endl;
 }
 
-void Blockchain::loadBlockFromFile()
+void Blockchain::loadBlockFromFile(std::string name)
 {
-    saveFile.open("Blockdata.txt", std::ios::out | std::ios::in | std::ios::app);
+    std::string path = name + ".txt";
+    saveFile.open(path, std::fstream::out | std::fstream::in | std::fstream::app);
     std::fstream blockData;
-    blockData.open("Blockdata.txt", std::ios::in);
+    blockData.open(path, std::ios::in);
     char checkEOF;
     while (blockData.get(checkEOF)) {
         blockData.unget();
@@ -187,7 +188,7 @@ void Blockchain::alertStorage() {
     }
 }
 
-void Blockchain::amountInStorage() {
+double Blockchain::amountInStorage() {
     double inAmount = 0, outAmount = 0;
     std::vector<Block>::iterator it;
     for (it = chain.begin(); it != chain.end(); ++it)
@@ -202,7 +203,7 @@ void Blockchain::amountInStorage() {
             outAmount += currentBlock.getData().amount;
         }
     }
-    std::cout << "Amount is :" << inAmount - outAmount << "kg\n";
+    return inAmount - outAmount;
 }
 
 void Blockchain::profitOfInter() {
@@ -222,7 +223,7 @@ void Blockchain::profitOfInter() {
                 outPrice += currentBlock.getData().price;
             }
     }
-    std::cout << "Profit of Interprise all the time is :" << inPrice - outPrice << "dollar\n";
+    std::cout << "Profit of Interprise all the time is :" << outPrice - inPrice << "dollar\n";
 }
 
 void Blockchain::searchFromDatetoDate(int m1, int y1, int m2, int y2)
@@ -230,7 +231,7 @@ void Blockchain::searchFromDatetoDate(int m1, int y1, int m2, int y2)
     double inPrice = 0, outPrice = 0;
     double inAmount = 0, outAmount = 0;
     int inOders = 0, outOders = 0;
-    std::vector<Block>::iterator it=chain.begin();
+    std::vector<Block>::iterator it = chain.begin();
     it++;
     for (; it != chain.end(); ++it)
     {
@@ -258,11 +259,114 @@ void Blockchain::searchFromDatetoDate(int m1, int y1, int m2, int y2)
             if (currentBlock.getData().mode == 1)
             {
                 inPrice += currentBlock.getData().price;
+                inAmount += currentBlock.getData().amount;
+                inOders++;
             }
             else
             {
                 outPrice += currentBlock.getData().price;
+                outAmount += currentBlock.getData().amount;
+                outOders++;
             }
         }
     }
+    std::cout << "from " << m1 << "/" << y1 << " to " << m2 << "/" << y2 << std::endl;
+    std::cout << inOders << " oders imported and " << outAmount << " oders exported" << std::endl;
+    std::cout << inAmount << " kg rice imported and " << outAmount << " kg exported" << std::endl;
+    std::cout << inPrice << " dollar for imported and " << outPrice << " dollar from exported" << std::endl;
+}
+void Blockchain::barChartOfYear(int year)
+{
+    double barChart[26][49];
+    double temp = 0;
+    for (int i = 0; i < 26; i++) {
+        for (int j = 0; j < 49; j++) {
+            barChart[i][j] = 0;
+        }
+    }
+    for (int i = 0; i < 26; i++) {
+        barChart[i][0] = temp;
+        temp += 0.2;
+    }
+    double AmountbyMonth[13][2];
+    for (int i = 0; i < 13; i++) {
+        for (int j = 0; j < 2; j++) {
+            AmountbyMonth[i][j] = 0;
+        }
+    }
+    std::vector<Block>::iterator it = chain.begin();
+    it++;
+    for (; it != chain.end(); ++it)
+    {
+        Block currentBlock = *it;
+        if (getYearfromDate(currentBlock.getData().date) == year) {
+            if (currentBlock.getData().mode == 0) {
+                AmountbyMonth[getMonthfromDate(currentBlock.getData().date)][0] += currentBlock.getData().amount;
+            }
+            else
+            {
+                AmountbyMonth[getMonthfromDate(currentBlock.getData().date)][1] += currentBlock.getData().amount;
+            }
+        }
+    }
+
+    int monthinChart = 2;
+    for (int i = 1; i < 13; i++) {
+        int tem = 0;
+        while (AmountbyMonth[i][0] >= barChart[tem][0] * 1000 && tem < 26) {
+            barChart[tem][monthinChart] = 1;
+            tem++;
+        }
+        tem = 0;
+        while (AmountbyMonth[i][1] >= barChart[tem][0] * 1000 && tem < 26) {
+            barChart[tem][monthinChart + 1] = 2;
+            tem++;
+        }
+        monthinChart += 4;
+    }
+    for (int i = 25; i >= 0; i--) {
+        for (int j = 0; j < 49; j++) {
+            if (i == 25 && j == 0) {
+                std::cout << "5.0 ";
+                continue;
+            }
+            if (i == 20 && j == 0) {
+                std::cout << "4.0 ";
+                continue;
+            }
+            if (i == 15 && j == 0) {
+                std::cout << "3.0 ";
+                continue;
+            }
+            if (i == 10 && j == 0) {
+                std::cout << "2.0 ";
+                continue;
+            }
+            if (i == 5 && j == 0) {
+                std::cout << "1.0 ";
+                continue;
+            }
+            if (i == 0 && j == 0) {
+                std::cout << "0   ";
+                continue;
+            }
+
+            if (barChart[i][j] == 1) {
+                std::cout << "- ";
+                continue;
+            }
+            if (barChart[i][j] == 2) {
+                std::cout << "+ ";
+                continue;
+            }
+            if (i != 0 && j != 0 && barChart[i][j] == 0) {
+                std::cout << "  ";
+                continue;
+            }
+
+            std::cout << barChart[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "- stand for the amount of export" << std::endl << "+ stand for the amount of import" << std::endl;
 }
