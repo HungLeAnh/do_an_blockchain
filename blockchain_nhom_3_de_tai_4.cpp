@@ -22,7 +22,7 @@ int main()
 {
     // Start Blockchain
     std::fstream listOfBC;
-    listOfBC.open("listofbc.txt", std::fstream::out|std::fstream::in|std::fstream::app);
+    //listOfBC.open("listofbc.txt", std::fstream::out|std::fstream::in|std::fstream::app);
 
     char ch;
     printf("===================================\n");
@@ -44,10 +44,21 @@ int main()
     else if (ch == 'y') {
         //create new file and genesis block
         //user.CreateFile(name);
-        user.GetChain()->createGenesisBlock(name);
+        listOfBC.open("listofbc.txt", std::fstream::in);
+        std::string genesis;   
+        getline(listOfBC, genesis);
+        listOfBC.close();
+        if (genesis ==  "") {
+            user.GetChain()->createGenesisBlock(name);
+        }
+        else {
+            user.CreateFile(name);
+            user.GetChain()->loadGenisisBlockFromFile(genesis);
+        }
+        listOfBC.open("listofbc.txt", std::fstream::out | std::fstream::app);
         std::string filename = name + ".txt";
         listOfBC << filename << std::endl;
-
+        listOfBC.close();
         //blockchain.createGenesisBlock();
     }
     // Data for first block
@@ -133,19 +144,6 @@ int main()
         }
 
     }
-
-    //Data data1(1,3,55000,"031510215", "Joe", "1 VVN","st25","15/3/2021", time(&data1Time));
-    //blockchain.addBlock(data1);
-
-    //time_t data2Time;
-    //Data data2(1, 1, 20000, "031510521", "Martha", "TP.HCM", "st25", "1/1/2021", time(&data2Time));
-    //blockchain.addBlock(data2);
-
-    //// Let's see what's in the blockchain blockchain!
-    //blockchain.printChain();
-
-    //// Is it valid?
-    //printf("\nIs chain still valid? %d\n", blockchain.isChainValid());
 
     return 0;
 }

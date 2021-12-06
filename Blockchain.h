@@ -26,11 +26,13 @@ public:
     Blockchain();
 
     // Public Functions
+    void createFile(std::string name);
     Block createGenesisBlock(std::string name);
     std::vector<Block> getChain();
     Block* getLatestBlock();
     bool isChainValid();
     void loadBlockFromFile(std::string name);
+    void loadGenisisBlockFromFile(std::string name);
     void saveBlock(Block block);
     void addBlock(Data data);
     void printChain();

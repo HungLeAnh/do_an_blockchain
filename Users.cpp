@@ -12,7 +12,7 @@ Users::Users()
 
 void Users::CreateFile(std::string name)
 {
-
+	userBlock.createFile(name);
 }
 
 void Users::Update(Data data)

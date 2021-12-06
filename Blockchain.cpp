@@ -25,11 +25,16 @@ std::vector<Block> Blockchain::getChain() {
     return chain;
 }
 
+void Blockchain::createFile(std::string name)
+{
+    std::string path = name + ".txt";
+    saveFile.open(path, std::fstream::out | std::fstream::in | std::fstream::trunc);
+}
+
 // Create Genesis Block
 Block Blockchain::createGenesisBlock(std::string name)
 {
-    std::string path = name + ".txt";
-    saveFile.open(path, std::fstream::out | std::fstream::in |std::fstream::trunc);
+    createFile(name);
     // Get Current Time
     std::time_t current;
 
@@ -54,7 +59,7 @@ void Blockchain::addBlock(Data d)
     int index = (int)chain.size();
     std::size_t previousHash = (int)chain.size() > 0 ? getLatestBlock()->getHash() : 0;
     Block newBlock(index, d, previousHash);
-    newBlock.MineBlock(1);
+    newBlock.MineBlock(0);
     chain.push_back(newBlock);
     saveBlock(newBlock);
 }
@@ -163,6 +168,28 @@ void Blockchain::loadBlockFromFile(std::string name)
         blockData >> prehash;
         Block savedBlock(index,savedData,hash,prehash);
         chain.push_back(savedBlock);
+        char dumbChar = blockData.get();
+    }
+}
+
+void Blockchain::loadGenisisBlockFromFile(std::string name)
+{
+    std::string path = name;
+    std::fstream blockData;
+    blockData.open(path, std::ios::in);
+    char checkEOF;
+    while (blockData.get(checkEOF)) {
+        blockData.unget();
+        int index;
+        size_t hash, prehash;
+        blockData >> index;
+        Data savedData;
+        savedData.addDataFromFile(blockData);
+        blockData >> hash;
+        blockData >> prehash;
+        Block savedBlock(index, savedData, hash, prehash);
+        chain.push_back(savedBlock);
+        saveBlock(savedBlock);
         char dumbChar = blockData.get();
     }
 }
