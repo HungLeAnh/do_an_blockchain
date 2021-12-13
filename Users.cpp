@@ -27,8 +27,24 @@ void Users::Update(Data data)
 		std::fstream updatefile;
 		updatefile.open(filename, std::fstream::out|std::fstream::app);
 		char checkEOF;
+		std::string thisFileName = name + ".txt";
+		if (thisFileName == filename)
+			continue;
 		//update data to all file
+		Block* latestBlock = userBlock.getLatestBlock();
 
+		updatefile << latestBlock->getIndex() << std::endl;
+		updatefile << latestBlock->getData().mode << std::endl;
+		updatefile << latestBlock->getData().amount << std::endl;
+		updatefile << latestBlock->getData().price << std::endl;
+		updatefile << latestBlock->getData().packageCode << std::endl;
+		updatefile << latestBlock->getData().date << std::endl;
+		updatefile << latestBlock->getData().address << std::endl;
+		updatefile << latestBlock->getData().name << std::endl;
+		updatefile << latestBlock->getData().type << std::endl;
+		updatefile << latestBlock->getData().timestamp << std::endl;
+		updatefile << latestBlock->getHash() << std::endl;
+		updatefile << latestBlock->getPreviousHash() << std::endl;
 	}
 }
 
